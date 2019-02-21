@@ -1,0 +1,158 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE struts PUBLIC "-//Apache Software Foundation//DTD Struts Configuration 2.1//EN" "http://struts.apache.org/dtds/struts-2.1.dtd">
+<struts>
+	<constant name="struts.custom.il8n.resources" value="FileUploadError"></constant>
+	<constant name="struts.custom.il8n.encoding" value="utf-8"></constant>
+	<package name="package1" extends="struts-default">
+	 	<action name="register" class="userAction" method="register">
+			<result name="success">/login.jsp</result>
+		</action>
+		<action name="login" class="userAction" method="login">
+			<result name="success">/index.jsp</result>
+			<result name="fail">/login.jsp </result>
+		</action>
+		<action name="logout" class="userAction" method="logout">
+			<result name="success">/index.jsp</result>
+		</action>
+		<action name="adminLogin" class="userAction" method="adminLogin">
+			<result name="success">/admin/indexAdmin.jsp</result>
+			<result name="fail">/admin/adminLogin.jsp </result>
+		</action>
+		<action name="logoutAdmin" class="userAction" method="logoutAdmin">
+			<result name="success">/admin/indexAdmin.jsp</result>
+		</action>
+		<action name="query_user" class="userAction" method="query_user">
+			<result name="success">/admin/query_user.jsp</result>
+		</action>
+		<action name="delete_user" class="userAction" method="delete_user">
+			<result name="success" type="chain">
+				<param name="actionName">query_user</param>
+			</result>
+		</action>
+		
+		<action name="menshoe" class="shoeAction" method="query_menshoe">
+			<result name="success">/menshoe.jsp</result>
+		</action>
+		<action name="womenshoe" class="shoeAction" method="query_womenshoe">
+			<result name="success">/womenshoe.jsp</result>
+		</action>
+		<action name="kidshoe" class="shoeAction" method="query_kidshoe">
+			<result name="success">/kidshoe.jsp</result>
+		</action>
+		<action name="sportshoe" class="shoeAction" method="query_sportshoe">
+			<result name="success">/sportshoe.jsp</result>
+		</action>
+		<action name="details" class="shoeAction" method="query_oneshoe">
+			<result name="success">/details.jsp</result>
+		</action>
+		<action name="brand" class="shoeAction" method="query_brands">
+			<result name="success">/brands.jsp</result>
+		</action>
+		<action name="brandshoe" class="shoeAction" method="query_brandshoe">
+			<result name="success">/brandshoe.jsp</result>
+		</action>
+		
+		<action name="query_brands" class="shoeAction" method="query_brands">
+			<result name="success">/admin/query_brands.jsp</result>
+		</action>
+		<action name="delete_brands" class="userAction" method="delete_brands">
+			<result name="success" type="chain">
+				<param name="actionName">query_brands</param>
+			</result>
+		</action>
+		<action name="add_brands" class="shoeAction" method="add_brands">
+			<result name="success" type="chain">
+				<param name="actionName">query_brands</param>
+			</result>
+		</action>
+		<action name="getBrands" class="shoeAction" method="query_brands">
+			<result name="success">/admin/add_shoe.jsp</result>
+		</action>
+		<action name="query_menshoe" class="shoeAction" method="query_menshoe">
+			<result name="success">/admin/query_menshoe.jsp</result>
+		</action>
+		<action name="delete_menshoe" class="shoeAction" method="delete_shoe">
+			<result name="success" type="chain">
+				<param name="actionName">query_menshoe</param>
+			</result>
+		</action>
+		<action name="add_menshoe" class="shoeAction" method="add_shoe">
+			<result name="success" type="chain">
+				<param name="actionName">query_menshoe</param>
+			</result>
+		</action>
+		<action name="query_womenshoe" class="shoeAction" method="query_womenshoe">
+			<result name="success">/admin/query_womenshoe.jsp</result>
+		</action>
+		<action name="delete_womenshoe" class="shoeAction" method="delete_shoe">
+			<result name="success" type="chain">
+				<param name="actionName">query_womenshoe</param>
+			</result>
+		</action>
+		<action name="add_womenshoe" class="shoeAction" method="add_shoe">
+			<result name="success" type="chain">
+				<param name="actionName">query_womenshoe</param>
+			</result>
+		</action>
+		<action name="query_sportshoe" class="shoeAction" method="query_sportshoe">
+			<result name="success">/admin/query_sportshoe.jsp</result>
+		</action>
+		<action name="delete_sportshoe" class="shoeAction" method="delete_shoe">
+			<result name="success" type="chain">
+				<param name="actionName">query_sportshoe</param>
+			</result>
+		</action>
+		<action name="add_sportshoe" class="shoeAction" method="add_shoe">
+			<result name="success" type="chain">
+				<param name="actionName">query_sportshoe</param>
+			</result>
+		</action>
+		<action name="query_kidshoe" class="shoeAction" method="query_kidshoe">
+			<result name="success">/admin/query_kidshoe.jsp</result>
+		</action>
+		<action name="delete_kidshoe" class="shoeAction" method="delete_shoe">
+			<result name="success" type="chain">
+				<param name="actionName">query_kidshoe</param>
+			</result>
+		</action>
+		<action name="add_kidshoe" class="shoeAction" method="add_shoe">
+			<result name="success" type="chain">
+				<param name="actionName">query_kidshoe</param>
+			</result>
+		</action>
+		<action name="add_shoe" class="shoeAction" method="add_shoe">
+			 <interceptor-ref name="fileUpload">
+				<param name="allowedTypes">
+					image/bmp,image/pjpeg,image/png,image/gif,image/jpeg
+				</param>
+				<param name="maximumSize">81920</param>
+			</interceptor-ref>
+			<interceptor-ref name="defaultStack"></interceptor-ref> 
+			<result name="success">/admin/indexAdmin.jsp</result>
+			<result name="input">/admin/add_shoe.jsp</result>
+		</action>
+		
+		<action name="query_userOrder" class="orderAction" method="query_userOrder">
+			<result name="success">/userOrder.jsp</result>
+		</action>
+		<action name="buy" class="orderAction" method="add_order">
+			<result name="success" type="chain">
+				<param name="actionName">query_userOrder</param>
+			</result>
+			<result name="input">/login.jsp</result>
+		</action>
+		<action name="cancel_order" class="orderAction" method="cancel_order">
+			<result name="success" type="chain">
+				<param name="actionName">query_userOrder</param>
+			</result>
+		</action>
+		<action name="query_order" class="orderAction" method="query_order">
+			<result name="success">/admin/query_orders.jsp</result>
+		</action>
+		<action name="deliver_order" class="orderAction" method="deliver_order">
+			<result name="success" type="chain">
+				<param name="actionName">query_order</param>
+			</result>
+		</action>
+	</package>
+</struts>    

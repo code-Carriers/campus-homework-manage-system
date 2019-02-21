@@ -1,0 +1,89 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans
+	xmlns="http://www.springframework.org/schema/beans"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xmlns:p="http://www.springframework.org/schema/p"
+	xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans-4.1.xsd http://www.springframework.org/schema/tx http://www.springframework.org/schema/tx/spring-tx.xsd" xmlns:tx="http://www.springframework.org/schema/tx">
+
+
+	<bean id="dataSource"
+		class="org.apache.commons.dbcp.BasicDataSource">
+		<property name="driverClassName"
+			value="com.mysql.jdbc.Driver">
+		</property>
+		<property name="url"
+			value="jdbc:mysql://localhost:3306/shoestore">
+		</property>
+		<property name="username" value="root"></property>
+		<property name="password" value="123456"></property>
+	</bean>
+	<bean id="sessionFactory"
+		class="org.springframework.orm.hibernate4.LocalSessionFactoryBean">
+		<property name="dataSource">
+			<ref bean="dataSource" />
+		</property>
+		<property name="hibernateProperties">
+			<props>
+				<prop key="hibernate.dialect">
+					org.hibernate.dialect.MySQLDialect
+				</prop>
+				<prop key="hibernate.show_sql">true</prop>
+				<prop key="hibernate.current_session_context_class">
+					thread
+				</prop>
+			</props>
+		</property>
+		<property name="mappingResources">
+			<list>
+				<value>com/entity/User.hbm.xml</value>
+				<value>com/entity/Shoe.hbm.xml</value>
+				<value>com/entity/Brand.hbm.xml</value>
+				<value>com/entity/Admin.hbm.xml</value>
+				<value>com/entity/Order.hbm.xml</value></list>
+		</property></bean>
+	<bean id="transactionManager"
+		class="org.springframework.orm.hibernate4.HibernateTransactionManager">
+		<property name="sessionFactory" ref="sessionFactory" />
+	</bean>
+	<tx:annotation-driven transaction-manager="transactionManager" />
+	
+	<!-- 定义UserDAOImpl类-->
+	<bean id="userDAO" class="com.dao.impl.UserDAOImpl">	  
+    	<property name="sessionFactory" ref="sessionFactory" />
+    </bean>
+    <!-- 定义UserBizImpl类,并为其userDAO属性注入值-->
+	<bean id="userBiz" class="com.service.impl.UserBizImpl">	  
+    	<property name="userDAO" ref="userDAO" />
+    </bean>
+	  <!-- 定义UserAction，并为其中属性userBiz注入值 -->
+	<bean name="userAction" class="com.action.UserAction" scope="prototype">
+    	<property name="userBiz" ref="userBiz" />
+    </bean>	
+    
+    <!-- 定义ShoeDAOImpl类-->
+	<bean id="shoeDAO" class="com.dao.impl.ShoeDAOImpl">	  
+    	<property name="sessionFactory" ref="sessionFactory" />
+    </bean>
+    <!-- 定义ShoeBizImpl类,并为其shoeDAO属性注入值-->
+	<bean id="shoeBiz" class="com.service.impl.ShoeBizImpl">	  
+    	<property name="shoeDAO" ref="shoeDAO" />
+    </bean>
+	  <!-- 定义ShoeAction，并为其中属性shoeBiz注入值 -->
+	<bean name="shoeAction" class="com.action.ShoeAction" scope="prototype">
+    	<property name="shoeBiz" ref="shoeBiz" />
+    </bean>	
+    
+     <!-- 定义OrderDAOImpl类-->
+	<bean id="orderDAO" class="com.dao.impl.OrderDAOImpl">	  
+    	<property name="sessionFactory" ref="sessionFactory" />
+    </bean>
+    <!-- 定义OrderBizImpl类,并为其shoeDAO属性注入值-->
+	<bean id="orderBiz" class="com.service.impl.OrderBizImpl">	  
+    	<property name="orderDAO" ref="orderDAO" />
+    </bean>
+	  <!-- 定义ShoeAction，并为其中属性shoeBiz注入值 -->
+	<bean name="orderAction" class="com.action.OrderAction" scope="prototype">
+    	<property name="orderBiz" ref="orderBiz" />
+    	<property name="shoeBiz" ref="shoeBiz" />
+    </bean>	
+</beans>
