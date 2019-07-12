@@ -1,0 +1,259 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE struts PUBLIC "-//Apache Software Foundation//DTD Struts Configuration 2.1//EN" "http://struts.apache.org/dtds/struts-2.1.dtd">
+<struts>
+	<constant name="struts.i18n.encoding" value="utf-8"></constant>
+	<package name="homework" namespace="/" extends="struts-default,json-default" >
+		<action name="*Logout" class="userAction" method="{1}Logout">
+			<result name="success">{1}Login.jsp</result>
+		</action>
+		<action name="*_*_user" class="userAction" method="{1}{2}">
+			<result name="success">/admin/{1}_{2}.jsp</result>
+			<result name="input" type="chain">
+				<param name="actionName">query_{2}_user</param>
+			</result>
+		</action>
+		<action name="*_*" class="{2}Action" method="{1}{2}">
+			<result name="success">/admin/{1}_{2}.jsp</result>
+			<result name="input" type="chain">
+				<param name="actionName">query_{2}</param>
+			</result>
+			<result name="inputstudent" type="chain">
+				<param name="actionName">querystudent_{2}</param>
+			</result>
+		</action> 
+		<action name="forgetPass" class="userAction" method="forgetPass">
+			<result name="student">/stuLogin.jsp</result>
+			<result name="teacher">/teaLogin.jsp</result>
+			<result name="input">/forgetPass.jsp</result>
+		</action>
+		<action name="stuLogin" class="userAction" method="stuLogin">
+			<result name="success">/student/indexofstu.jsp</result>
+			<result name="fail">/stuLogin.jsp</result>
+		</action>
+		<action name="teaLogin" class="userAction" method="teaLogin">
+			<result name="success">/teacher/indexoftea.jsp</result>
+			<result name="fail">/teaLogin.jsp</result>
+		</action>
+		<action name="adminLogin" class="userAction" method="adminLogin">
+			<result name="success">/admin/indexofadmin.jsp</result>
+			<result name="fail">/adminLogin.jsp</result>
+		</action>
+		
+		<action name="searchStu" class="userAction" method="searchStu">
+			<result name="success" type="json">
+				 <param name="root">message</param> 
+			</result>
+		</action>
+		<action name="searchTea" class="userAction" method="searchTea">
+			<result name="success" type="json">
+				 <param name="root">message</param> 
+			</result>
+		</action>
+		<action name="stuRegister" class="userAction" method="stuRegister">			
+			<result name="success" >/stuLogin.jsp</result>	
+		</action>
+		<action name="teaRegister" class="userAction" method="teaRegister">			
+			<result name="success" >/teaLogin.jsp</result>	
+		</action>
+		<action name="modifyInform" class="userAction" method="modifyInform">
+			<result name="success">/student/indexofstu.jsp</result>
+		</action>
+		<action name="modifyTeaInform" class="userAction" method="modifyTeaInform">
+			<result name="success">/teacher/indexoftea.jsp</result>
+		</action>
+		
+		<action name="getAllTeacher" class="userAction" method="getAllTeacher">
+			<result name="success">/admin/add_class.jsp</result>
+		</action>
+		
+		<action name="classNumber" class="classAction" method="classDetail">
+			<result name="success">/admin/classNumber.jsp</result>
+		</action>
+		<action name="classWork" class="classAction" method="classDetail">
+			<result name="success">/admin/classWork.jsp</result>
+		</action>
+		<action name="classAnnounce" class="classAction" method="classDetail">
+			<result name="success">/admin/classAnnounce.jsp</result>
+		</action>
+		<action name="classQuestion" class="classAction" method="classDetail">
+			<result name="success">/admin/classQuestion.jsp</result>
+		</action>
+		<action name="showClassByTea" class="classAction" method="showClassByTea">
+			<result name="success">/teacher/showClassByTea.jsp</result>
+		</action>
+		<action name="getAllClassByTea" class="classAction" method="getAllClassByTea">
+			<result name="success">/teacher/showClassByTea.jsp</result>
+		</action>
+		<action name="getAllClassByStu" class="classAction" method="getAllClassByStu">
+			<result name="success">/student/showClassByStu.jsp</result>
+		</action>
+		<action name="classDetail" class="classAction" method="classDetail">
+			<result name="success">/teacher/classDetail.jsp</result>
+		</action>
+		<action name="stuClassDetail" class="classAction" method="stuClassDetail">
+			<result name="success">/student/stuClassDetail.jsp</result>
+		</action>
+		<action name="showClassByStu" class="classAction" method="showClassByStu">
+			<result name="success">/student/showClassByStu.jsp</result>
+		</action>
+		<action name="showClassByName" class="classAction" method="showClassByClassName">
+			<result name="success">/teacher/searchClassResult.jsp</result>
+		</action>
+		<action name="joinClassByName" class="classAction" method="showClassByClassName">
+			<result name="success">/student/searchClassResult.jsp</result>
+		</action>
+		<action name="joinClassByTeaName" class="classAction" method="showClassByTeaName">
+			<result name="success">/student/searchClassResult.jsp</result>
+		</action>
+		<action name="createClass" class="classAction" method="createClass">
+			<result name="success" type="chain">
+				<param name="actionName">showClassByTea</param>
+			</result>
+			<result name="input">/teacher/addClass.jsp</result>
+		</action>
+		<action name="joinClass" class="classAction" method="joinClass">
+			<result name="success" type="chain">
+				<param name="actionName">showClassByStu</param>
+			</result>
+		</action>
+		<action name="exitClass" class="classAction" method="exitClass">
+			<result name="success" type="chain">
+				<param name="actionName">showClassByStu</param>
+			</result>
+		</action>
+		<action name="deleteClass" class="classAction" method="deleteClass">
+			<result name="success" type="chain">
+				<param name="actionName">showClassByTea</param>
+			</result>
+		</action>
+		
+		<action name="addWork" class="workAction" method="addWork">
+			<interceptor-ref name="defaultStack">
+				<!-- 允许上传的文件的扩展名,多个扩展名用逗号分隔 -->
+				<param name="fileUpload.allowedExtensions">.doc,.txt</param>
+				<!-- 语序上传的mime类型 -->
+				<param name="fileUpload.allowedTypes">text/plain,application/msword</param>
+			</interceptor-ref>
+			<result name="success">/teacher/addWorkSuccess.jsp</result>
+			<result name="input">/teacher/addWork.jsp</result>
+		</action>
+		<action name="modifyWork" class="workAction" method="modifyWork">
+			<interceptor-ref name="defaultStack">
+				<!-- 允许上传的文件的扩展名,多个扩展名用逗号分隔 -->
+				<param name="fileUpload.allowedExtensions">.doc,.docx,.txt</param>
+				<!-- 语序上传的mime类型 -->
+				<param name="fileUpload.allowedTypes">text/plain,application/msword</param>
+			</interceptor-ref>
+			<result name="success">/teacher/modifyWorkSuccess.jsp</result>
+			<result name="input">/teacher/modifyWork.jsp</result>
+		</action>
+		<action name="modifyScore" class="workAction" method="modifyScore">
+			<result name="success" type="chain">
+				<param name="actionName">workDetail</param>
+			</result>
+		</action>
+		<action name="deleteWork" class="workAction" method="deleteWork">
+			<result name="success" type="chain">
+				<param name="actionName">showWorkByTea</param>
+			</result>
+		</action>
+		<action name="submitWork" class="workAction" method="submitWork">
+			<interceptor-ref name="defaultStack">
+				<!-- 允许上传的文件的扩展名,多个扩展名用逗号分隔 -->
+				<param name="fileUpload.allowedExtensions">.doc,.txt</param>
+				<!-- 语序上传的mime类型 -->
+				<param name="fileUpload.allowedTypes">text/plain,application/msword</param>
+			</interceptor-ref>
+			<result name="success" type="chain">
+				<param name="actionName">showWorkByStu</param>
+			</result>
+			<result name="input">/student/stuWorkDetail.jsp</result>
+		</action>
+		<action name="showWorkByStu" class="workAction" method="searchWorkByStu">
+			<result name="success">/student/showWorkByStu.jsp</result>
+		</action>
+		<action name="showWorkOfNoSubmit" class="workAction" method="showWorkOfNoSubmit">
+			<result name="success">/student/showWorkOfNoSubmit.jsp</result>
+		</action>
+		<action name="showWorkOfSubmit" class="workAction" method="showWorkOfSubmit">
+			<result name="success">/student/showWorkOfSubmit.jsp</result>
+		</action>
+		<action name="showWorkByTea" class="workAction" method="searchWorkByTea">
+			<result name="success">/teacher/showWorkByTea.jsp</result>
+		</action>
+		<action name="workDetail" class="workAction" method="workDetail">
+			<result name="success">/teacher/workDetail.jsp</result>
+		</action>
+		<action name="stuWorkDetail" class="workAction" method="workDetail">
+			<result name="success">/student/stuWorkDetail.jsp</result>
+		</action>
+		<action name="downFile" class="workAction" method="downFile">
+   			<result name="success" type="stream">  
+    			<param name="contentType">application/octet-stream;charset=ISO8859-1</param>
+   				<!-- inputName 流对象名 —— 比如这里写inputStream，它就会自动去找Action中的getInputStream方法。 -->
+   				<param name="inputName">inputStream</param>
+   				<!-- contentDisposition 使用经过转码的文件名作为下载文件名 —— 默认格式是attachment;filename="${fileName}"，将调用该Action中的getFileName方法。 -->
+   				<param name="contentDisposition">attachment;filename=${filename}</param>
+  				<!-- bufferSize 下载文件的缓冲大小 -->
+   				<param name="bufferSize">4096</param>
+   			</result>
+   		</action>
+   		<action name="downStuWork" class="workAction" method="downStuWork">
+   			<result name="success" type="stream">  
+    			<param name="contentType">application/octet-stream;charset=ISO8859-1</param>
+   				<!-- inputName 流对象名 —— 比如这里写inputStream，它就会自动去找Action中的getInputStream方法。 -->
+   				<param name="inputName">inputStream</param>
+   				<!-- contentDisposition 使用经过转码的文件名作为下载文件名 —— 默认格式是attachment;filename="${fileName}"，将调用该Action中的getFileName方法。 -->
+   				<param name="contentDisposition">attachment;filename=${filename}</param>
+  				<!-- bufferSize 下载文件的缓冲大小 -->
+   				<param name="bufferSize">4096</param>
+   			</result>
+   		</action>
+		
+		<action name="addAnnounce" class="announceAction" method="addAnnounce">
+			<result name="success">/teacher/addAnnounceSuccess.jsp</result>
+		</action>
+		<action name="deleteAnnounce" class="announceAction" method="deleteAnnounce">
+			<result name="success" type="chain">
+				<param name="actionName">showAnnounceByTea</param>
+			</result>
+		</action>
+		<action name="showAnnounceByTea" class="announceAction" method="searchAnnounceByTea">
+			<result name="success">/teacher/showAnnounceByTea.jsp</result>
+		</action>
+		<action name="showAnnounceByStu" class="announceAction" method="searchAnnounceByStu">
+			<result name="success">/student/showAnnounceByStu.jsp</result>
+		</action>
+		
+		<action name="addQuestion" class="questionAction" method="addQuestion">
+			<result name="input" type="chain">
+				<param name="actionName">showQuestionByStu</param>
+			</result>
+		</action>
+		<action name="answerQuestion" class="questionAction" method="answerQuestion">
+			<result name="input" type="chain">
+				<param name="actionName">showQuestionByTea</param>
+			</result>
+		</action>
+		<action name="showQuestionByStu" class="questionAction" method="searchQuestionByStu">
+			<result name="success">/student/showQuestionByStu.jsp</result>
+		</action>
+		
+		<action name="showQuestionByTea" class="questionAction" method="searchQuestionByTea">
+			<result name="success">/teacher/showQuestionByTea.jsp</result>
+		</action>
+		<action name="showQuestionOfNotAnswer" class="questionAction" method="searchQuestionOfNotAnswer">
+			<result name="success">/teacher/showQuestionOfNotAnswer.jsp</result>
+		</action>
+		<action name="deleteQuestion" class="questionAction" method="deleteQuestion">
+			<result name="input" type="chain">
+				<param name="actionName">showQuestionByStu</param>
+			</result>
+		</action>
+		<action name="deleteAnswer" class="questionAction" method="deleteAnswer">
+			<result name="input" type="chain">
+				<param name="actionName">showQuestionByTea</param>
+			</result>
+		</action>
+	</package>
+</struts>    

@@ -1,0 +1,125 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans
+	xmlns="http://www.springframework.org/schema/beans"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xmlns:p="http://www.springframework.org/schema/p"
+	xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans-4.1.xsd http://www.springframework.org/schema/tx http://www.springframework.org/schema/tx/spring-tx.xsd" xmlns:tx="http://www.springframework.org/schema/tx">
+
+
+	<bean id="dataSource"
+		class="org.apache.commons.dbcp.BasicDataSource">
+		<property name="driverClassName"
+			value="com.mysql.jdbc.Driver">
+		</property>
+		<property name="url"
+			value="jdbc:mysql://localhost:3306/homework">
+		</property>
+		<property name="username" value="root"></property>
+		<property name="password" value="123456"></property>
+	</bean>
+	<bean id="sessionFactory"
+		class="org.springframework.orm.hibernate4.LocalSessionFactoryBean">
+		<property name="dataSource">
+			<ref bean="dataSource" />
+		</property>
+		<property name="hibernateProperties">
+			<props>
+				<prop key="hibernate.dialect">
+					org.hibernate.dialect.MySQLDialect
+				</prop>
+				<prop key="hibernate.show_sql">true</prop>
+				<prop key="hibernate.current_session_context_class">
+				thread
+				</prop>
+			</props>
+		</property>
+		<property name="mappingResources">
+			<list>
+				<value>com/entity/Teacher.hbm.xml</value>
+				<value>com/entity/Work.hbm.xml</value>
+				<value>com/entity/Studentwork.hbm.xml</value>
+				<value>com/entity/Studentclass.hbm.xml</value>
+				<value>com/entity/Student.hbm.xml</value>				
+				<value>com/entity/Courseclass.hbm.xml</value>
+				<value>com/entity/Question.hbm.xml</value>
+				<value>com/entity/Announce.hbm.xml</value></list>
+		</property></bean>
+	<bean id="transactionManager"
+		class="org.springframework.orm.hibernate4.HibernateTransactionManager">
+		<property name="sessionFactory" ref="sessionFactory" />
+	</bean>
+	<tx:annotation-driven transaction-manager="transactionManager" />
+	
+	<!-- 定义UserDAOImpl类-->
+	<bean id="userDAO" class="com.dao.impl.UserDAOImpl">	  
+    	<property name="sessionFactory" ref="sessionFactory" />
+    </bean>
+    <!-- 定义UserBizImpl类,并为其userDAO属性注入值-->
+	<bean id="userBiz" class="com.biz.impl.UserBizImpl">	  
+    	<property name="userDAO" ref="userDAO" />
+    </bean>
+	  <!-- 定义UserAction，并为其中属性userBiz注入值 -->
+	<bean name="userAction" class="com.action.UserAction" scope="prototype">
+    	<property name="userBiz" ref="userBiz" />
+    </bean>	
+    
+    <!-- 定义班级ClassDAOImpl -->
+   <bean id="classDAO" class="com.dao.impl.ClassDAOImpl">	  
+    	<property name="sessionFactory" ref="sessionFactory"/>
+    </bean>
+    <!-- 定义ClassBizImpl类,并为其classDAO属性注入值-->
+	<bean id="classBiz" class="com.biz.impl.ClassBizImpl">	  
+    	<property name="classDAO" ref="classDAO" />
+    </bean>
+	  <!-- 定义ClassAction，并为其中属性classBiz注入值 -->
+	<bean name="classAction" class="com.action.ClassAction" scope="prototype">
+    	<property name="userBiz" ref="userBiz" />
+    	<property name="classBiz" ref="classBiz" />
+    	<property name="workBiz" ref="workBiz" />
+    	<property name="announceBiz" ref="announceBiz"/>
+    	<property name="questionBiz" ref="questionBiz" />
+    </bean>	
+    
+     <!-- 定义WorkDAOImpl -->
+    <bean id="workDAO" class="com.dao.impl.WorkDAOImpl">	  
+    	<property name="sessionFactory" ref="sessionFactory"/>
+    </bean>
+    <!-- 定义WorkBizImpl类,并为其workDAO属性注入值-->
+	<bean id="workBiz" class="com.biz.impl.WorkBizImpl">	  
+    	<property name="workDAO" ref="workDAO" />
+    </bean>
+	  <!-- 定义WorkAction，并为其中属性workBiz注入值 -->
+	<bean name="workAction" class="com.action.WorkAction" scope="prototype">
+    	<property name="workBiz" ref="workBiz" />
+    	<property name="classBiz" ref="classBiz" />
+    	<property name="userBiz" ref="userBiz" />
+    </bean>	
+    
+     <!-- 定义AnnounceDAOImpl -->
+   <bean id="announceDAO" class="com.dao.impl.AnnounceDAOImpl">	  
+    	<property name="sessionFactory" ref="sessionFactory" />
+    </bean>
+    <!-- 定义AnnounceBizImpl类,并为其announceDAO属性注入值-->
+	<bean id="announceBiz" class="com.biz.impl.AnnounceBizImpl">	  
+    	<property name="announceDAO" ref="announceDAO" />
+    </bean>
+	  <!-- 定义AnnounceAction，并为其中属性announceBiz注入值 -->
+	<bean name="announceAction" class="com.action.AnnounceAction" scope="prototype">
+		<property name="classBiz" ref="classBiz" />
+    	<property name="announceBiz" ref="announceBiz" />
+    </bean>	
+    
+      <!-- 定义questionDAOImpl -->
+   <bean id="questionDAO" class="com.dao.impl.QuestionDAOImpl">	  
+    	<property name="sessionFactory" ref="sessionFactory" />
+    </bean>
+    <!-- 定义questionBizImpl类,并为其questionDAO属性注入值-->
+	<bean id="questionBiz" class="com.biz.impl.QuestionBizImpl">	  
+    	<property name="questionDAO" ref="questionDAO" />
+    </bean>
+	  <!-- 定义AnnounceAction，并为其中属性questionBiz注入值 -->
+	<bean name="questionAction" class="com.action.QuestionAction" scope="prototype">
+		<property name="classBiz" ref="classBiz" />
+    	<property name="questionBiz" ref="questionBiz" />
+    </bean>	
+	</beans>
